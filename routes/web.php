@@ -13,6 +13,14 @@ Route::middleware('guest:job_seeker')->group(function () {
     Route::post('/job-seeker/login', [PortalAuthController::class, 'jobSeekerLogin']);
     Route::get('/job-seeker/register', [PortalAuthController::class, 'showJobSeekerRegister'])->name('job-seeker.register');
     Route::post('/job-seeker/register', [PortalAuthController::class, 'jobSeekerRegister']);
+    Route::get('/auth/{provider}/redirect', [PortalAuthController::class, 'redirectToSocialProvider'])->name('social.redirect');
+    Route::get('/auth/{provider}/callback', [PortalAuthController::class, 'handleSocialProviderCallback'])->name('social.callback');
+});
+
+Route::middleware('auth:job_seeker')->group(function () {
+    Route::get('/otp-verification', [PortalAuthController::class, 'showOtpVerification'])->name('otp.verification.notice');
+    Route::post('/otp-verification', [PortalAuthController::class, 'verifyOtp'])->name('otp.verification.verify');
+    Route::post('/otp-verification/resend', [PortalAuthController::class, 'resendOtp'])->name('otp.verification.resend');
 });
 
 Route::middleware('guest:recruiter')->group(function () {
@@ -33,7 +41,6 @@ Route::post('/logout', [PortalAuthController::class, 'logout'])->name('logout');
 Route::get('/companies/{company}', [JobSeekerController::class, 'viewCompanyProfile'])->name('companies.profile');
 
 Route::middleware('auth:job_seeker')->prefix('job-seeker')->name('job-seeker.')->group(function () {
-    Route::get('/dashboard', [JobSeekerController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [JobSeekerController::class, 'profile'])->name('profile');
     Route::post('/profile', [JobSeekerController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/experience', [JobSeekerController::class, 'addExperience'])->name('experience.add');
@@ -42,6 +49,10 @@ Route::middleware('auth:job_seeker')->prefix('job-seeker')->name('job-seeker.')-
     Route::delete('/profile/cv/{mediaId}', [JobSeekerController::class, 'removeCv'])->name('cv.delete');
     Route::get('/jobs', [JobSeekerController::class, 'jobs'])->name('jobs');
     Route::get('/jobs/{job}', [JobSeekerController::class, 'detail'])->name('jobs.detail');
+});
+
+Route::middleware(['auth:job_seeker', 'verified'])->prefix('job-seeker')->name('job-seeker.')->group(function () {
+    Route::get('/dashboard', [JobSeekerController::class, 'dashboard'])->name('dashboard');
     Route::post('/jobs/{job}/apply', [JobSeekerController::class, 'apply'])->name('jobs.apply');
     Route::post('/jobs/{job}/bookmark', [JobSeekerController::class, 'toggleBookmark'])->name('jobs.bookmark');
     Route::get('/bookmarks', [JobSeekerController::class, 'bookmarks'])->name('bookmarks');
