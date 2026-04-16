@@ -21,9 +21,13 @@ class JobSeekerOtpNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
+        $recipientName = property_exists($notifiable, 'name') && ! empty($notifiable->name)
+            ? $notifiable->name
+            : 'Job Seeker';
+
         return (new MailMessage)
             ->subject('Kode OTP Verifikasi Akun JobBoard')
-            ->greeting('Halo ' . $notifiable->name . ',')
+            ->greeting('Halo ' . $recipientName . ',')
             ->line('Terima kasih telah mendaftar di JobBoard.')
             ->line('Kode OTP verifikasi akun Anda adalah:')
             ->line('**' . $this->otpCode . '**')

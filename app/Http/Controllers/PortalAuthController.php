@@ -8,14 +8,11 @@ use App\Notifications\JobSeekerOtpNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class PortalAuthController extends Controller
 {
-    private const ALLOWED_SOCIAL_PROVIDERS = ['google', 'facebook'];
-
     public function showJobSeekerLogin()
     {
         return view('auth.job-seeker-login');
@@ -73,6 +70,11 @@ class PortalAuthController extends Controller
         try {
             $user->notify(new JobSeekerOtpNotification($otp));
         } catch (Throwable $e) {
+            Log::error('OTP send failed on register.', [
+                'email' => $user->email,
+                'message' => $e->getMessage(),
+            ]);
+
             return redirect()->route('otp.verification.notice')
                 ->withErrors(['email' => 'OTP gagal dikirim. Periksa konfigurasi SMTP (MAIL_HOST/MAIL_PORT/MAIL_USERNAME/MAIL_PASSWORD).'])
                 ->with('success', 'Akun berhasil dibuat, tetapi pengiriman OTP gagal. Silakan perbaiki SMTP lalu klik kirim ulang OTP.');
@@ -162,6 +164,11 @@ class PortalAuthController extends Controller
         try {
             $user->notify(new JobSeekerOtpNotification($otp));
         } catch (Throwable $e) {
+            Log::error('OTP resend failed.', [
+                'email' => $user->email,
+                'message' => $e->getMessage(),
+            ]);
+
             return back()->withErrors([
                 'otp_code' => 'Kirim ulang OTP gagal. Periksa konfigurasi SMTP Anda.',
             ]);
@@ -169,62 +176,6 @@ class PortalAuthController extends Controller
         $request->session()->put('otp_last_sent_at', now()->timestamp);
 
         return back()->with('success', 'OTP baru berhasil dikirim. Berlaku selama 5 menit.');
-    }
-
-    public function redirectToSocialProvider(string $provider)
-    {
-        abort_unless(in_array($provider, self::ALLOWED_SOCIAL_PROVIDERS, true), 404);
-
-        if (! config("services.{$provider}.client_id") || ! config("services.{$provider}.client_secret") || ! config("services.{$provider}.redirect")) {
-            return redirect()->route('job-seeker.login')
-                ->withErrors(['email' => 'Konfigurasi login ' . ucfirst($provider) . ' belum lengkap. Isi env ' . strtoupper($provider) . '_CLIENT_ID, _CLIENT_SECRET, dan _REDIRECT_URI.']);
-        }
-
-        return Socialite::driver($provider)->redirect();
-    }
-
-    public function handleSocialProviderCallback(Request $request, string $provider)
-    {
-        abort_unless(in_array($provider, self::ALLOWED_SOCIAL_PROVIDERS, true), 404);
-
-        try {
-            $socialUser = Socialite::driver($provider)->user();
-        } catch (Throwable $e) {
-            return redirect()->route('job-seeker.login')
-                ->withErrors(['email' => 'Login ' . ucfirst($provider) . ' gagal. Silakan coba lagi.']);
-        }
-
-        $email = $socialUser->getEmail();
-        if (! $email) {
-            return redirect()->route('job-seeker.login')
-                ->withErrors(['email' => 'Akun ' . ucfirst($provider) . ' tidak menyediakan email.']);
-        }
-
-        $name = $socialUser->getName() ?: ($socialUser->getNickname() ?: 'Job Seeker');
-
-        $user = User::query()->firstOrCreate(
-            ['email' => $email],
-            [
-                'name' => $name,
-                'password' => Hash::make(Str::password(24)),
-            ]
-        );
-
-        $jobSeeker = $user->jobSeeker()->firstOrCreate();
-        $jobSeeker->update([
-            'provider' => $provider,
-            'provider_id' => (string) $socialUser->getId(),
-            'avatar' => $socialUser->getAvatar(),
-            'is_verified' => true,
-            'otp_code' => null,
-            'otp_expired_at' => null,
-        ]);
-
-        Auth::guard('job_seeker')->login($user, true);
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('job-seeker.dashboard'))
-            ->with('success', 'Berhasil login dengan ' . ucfirst($provider) . '.');
     }
 
     public function showRecruiterLogin()

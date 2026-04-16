@@ -13,8 +13,6 @@ Route::middleware('guest:job_seeker')->group(function () {
     Route::post('/job-seeker/login', [PortalAuthController::class, 'jobSeekerLogin']);
     Route::get('/job-seeker/register', [PortalAuthController::class, 'showJobSeekerRegister'])->name('job-seeker.register');
     Route::post('/job-seeker/register', [PortalAuthController::class, 'jobSeekerRegister']);
-    Route::get('/auth/{provider}/redirect', [PortalAuthController::class, 'redirectToSocialProvider'])->name('social.redirect');
-    Route::get('/auth/{provider}/callback', [PortalAuthController::class, 'handleSocialProviderCallback'])->name('social.callback');
 });
 
 Route::middleware('auth:job_seeker')->group(function () {

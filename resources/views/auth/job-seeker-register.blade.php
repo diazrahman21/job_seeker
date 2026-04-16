@@ -7,17 +7,6 @@
         Setelah daftar, akun wajib verifikasi OTP terlebih dahulu sebelum bisa login penuh dan melamar kerja.
     </div>
 
-    <div class="mt-4 space-y-2">
-        <a href="{{ route('social.redirect', ['provider' => 'google']) }}" class="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 py-2 text-sm font-medium hover:bg-slate-50">
-            <span>Lanjut dengan Google</span>
-        </a>
-        <a href="{{ route('social.redirect', ['provider' => 'facebook']) }}" class="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 py-2 text-sm font-medium hover:bg-slate-50">
-            <span>Lanjut dengan Facebook</span>
-        </a>
-    </div>
-
-    <div class="my-4 text-center text-xs uppercase tracking-wide text-slate-400">atau</div>
-
     <form method="post" action="{{ route('job-seeker.register') }}" class="mt-4 space-y-3">
         @csrf
         <input name="name" placeholder="Nama" class="w-full rounded-lg border-slate-300" required>
