@@ -178,6 +178,49 @@ class JobSeekerController extends Controller
         return view('job-seeker.jobs');
     }
 
+    /**
+     * Show public jobs listing (no authentication required)
+     */
+    public function publicJobs(Request $request)
+    {
+        $query = Job::where('status', 'approved');
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by location
+        if ($request->filled('location')) {
+            $query->where('location', 'like', "%{$request->input('location')}%");
+        }
+
+        $jobs = $query->with('company')
+            ->withCount('applications')
+            ->latest()
+            ->paginate(12);
+
+        return view('job-seeker.jobs-public', compact('jobs'));
+    }
+
+    /**
+     * Show public job detail (no authentication required)
+     */
+    public function publicJobDetail(Job $job)
+    {
+        abort_if($job->status !== 'approved', 404);
+
+        return view('job-seeker.job-detail-public', [
+            'job' => $job->load('company'),
+            'applicationsCount' => $job->applications()->count(),
+        ]);
+    }
+
     public function detail(Job $job)
     {
         abort_if($job->status !== 'approved', 404);

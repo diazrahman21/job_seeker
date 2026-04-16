@@ -1,12 +1,68 @@
 @extends('layouts.app')
 @section('content')
-<div class="mx-auto max-w-md rounded-xl border bg-white p-6">
-    <h1 class="text-2xl font-bold">Login Admin</h1>
-    <form method="post" action="{{ route('admin.login') }}" class="mt-4 space-y-3">
-        @csrf
-        <input name="email" type="email" placeholder="Email" class="w-full rounded-lg border-slate-300" required>
-        <input name="password" type="password" placeholder="Password" class="w-full rounded-lg border-slate-300" required>
-        <button class="w-full rounded-lg bg-slate-900 py-2 text-white">Masuk Admin</button>
-    </form>
+<div class="mx-auto max-w-md mt-12">
+    <div class="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-200">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-900">Login Admin</h1>
+            <p class="text-slate-600 mt-2">Akses panel administrasi</p>
+        </div>
+        
+        <form method="post" action="{{ route('admin.login') }}" class="space-y-5">
+            @csrf
+            
+            <x-input 
+                name="email" 
+                type="email"
+                label="Email"
+                placeholder="admin@jobboard.com" 
+                :error="$errors->first('email')"
+                required
+            />
+            
+            <x-input 
+                name="password" 
+                type="password"
+                label="Password"
+                placeholder="••••••••" 
+                :error="$errors->first('password')"
+                required
+            />
+            
+            <x-button type="submit" variant="primary" size="lg" class="w-full">
+                <span class="flex items-center gap-2 justify-center">
+                    <x-icon name="lock-closed" class="w-5 h-5" />
+                    Login Admin
+                </span>
+            </x-button>
+        </form>
+    </divorm method="post" action="{{ route('admin.login') }}" class="space-y-5">
+            @csrf
+            
+            <x-input 
+                name="email" 
+                type="email"
+                label="Email"
+                placeholder="admin@jobboard.com" 
+                :error="$errors->first('email')"
+                required
+            />
+            
+            <x-input 
+                name="password" 
+                type="password"
+                label="Password"
+                placeholder="••••••••" 
+                :error="$errors->first('password')"
+                required
+            />
+            
+            <x-button type="submit" variant="primary" size="lg" class="w-full">
+                <span class="flex items-center gap-2 justify-center">
+                    <x-icon name="lock-closed" class="w-5 h-5" />
+                    Login Admin
+                </span>
+            </x-button>
+        </form>
+    </div>
 </div>
 @endsection

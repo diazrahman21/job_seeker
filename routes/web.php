@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
 
+// Public job listings - accessible to everyone
+Route::get('/jobs', [JobSeekerController::class, 'publicJobs'])->name('jobs.public');
+Route::get('/jobs/{job}', [JobSeekerController::class, 'publicJobDetail'])->name('jobs.public.detail');
+
 Route::middleware('guest:job_seeker')->group(function () {
     Route::get('/job-seeker/login', [PortalAuthController::class, 'showJobSeekerLogin'])->name('job-seeker.login');
     Route::post('/job-seeker/login', [PortalAuthController::class, 'jobSeekerLogin']);

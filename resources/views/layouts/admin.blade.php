@@ -13,7 +13,7 @@
         <aside class="fixed left-0 top-0 h-screen w-64 overflow-y-auto border-r border-gray-200 bg-white shadow-sm">
             <!-- Sidebar Header -->
             <div class="border-b border-gray-200 px-6 py-6">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-600 no-underline">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-600 no-underline hover:text-blue-700 transition-colors">
                     <x-icon name="cog-6-tooth" class="w-8 h-8" />
                     <span>Admin</span>
                 </a>
@@ -21,31 +21,31 @@
 
             <!-- Navigation Menu -->
             <nav class="space-y-2 p-4">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="chart-bar" class="w-5 h-5" />
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('admin.companies') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.companies*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.companies') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.companies*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="building-office-2" class="w-5 h-5" />
                     <span>Perusahaan</span>
                 </a>
-                <a href="{{ route('admin.jobs') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.jobs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.jobs') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.jobs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="briefcase" class="w-5 h-5" />
                     <span>Lowongan</span>
                 </a>
-                <a href="{{ route('admin.users') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.users*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.users') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.users*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="users" class="w-5 h-5" />
                     <span>Pencari Kerja</span>
                 </a>
-                <a href="{{ route('admin.applications') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.applications*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.applications') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.applications*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="document-text" class="w-5 h-5" />
                     <span>Lamaran</span>
                 </a>
-                <a href="{{ route('admin.reports') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.reports*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.reports') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.reports*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="chart-bar" class="w-5 h-5" />
                     <span>Laporan</span>
                 </a>
-                <a href="{{ route('admin.logs') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('admin.logs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                <a href="{{ route('admin.logs') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('admin.logs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                     <x-icon name="clock" class="w-5 h-5" />
                     <span>Log Aktivitas</span>
                 </a>

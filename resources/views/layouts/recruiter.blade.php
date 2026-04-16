@@ -15,7 +15,7 @@
             <aside class="fixed left-0 top-0 h-screen w-64 overflow-y-auto border-r border-gray-200 bg-white shadow-sm md:relative md:w-auto">
                 <!-- Sidebar Header -->
                 <div class="border-b border-gray-200 px-6 py-6">
-                    <a href="{{ route('recruiter.dashboard') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-600 no-underline">
+                    <a href="{{ route('recruiter.dashboard') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-600 no-underline hover:text-blue-700 transition-colors">
                         <x-icon name="briefcase" class="w-8 h-8" />
                         <span>Recruiter</span>
                     </a>
@@ -23,15 +23,15 @@
 
                 <!-- Navigation Menu -->
                 <nav class="space-y-2 p-4">
-                    <a href="{{ route('recruiter.dashboard') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.dashboard') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                    <a href="{{ route('recruiter.dashboard') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('recruiter.dashboard') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                         <x-icon name="chart-bar" class="w-5 h-5" />
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('recruiter.jobs.index') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.jobs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                    <a href="{{ route('recruiter.jobs.index') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('recruiter.jobs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                         <x-icon name="briefcase" class="w-5 h-5" />
                         <span>Lowongan Saya</span>
                     </a>
-                    <a href="{{ route('recruiter.profile.edit') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.profile*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                    <a href="{{ route('recruiter.profile.edit') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 {{ request()->routeIs('recruiter.profile*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                         <x-icon name="building-office-2" class="w-5 h-5" />
                         <span>Profil Perusahaan</span>
                     </a>
@@ -73,21 +73,21 @@
                 <section class="p-4 md:p-8">
                     <!-- Alert Messages -->
                     @if(session('success'))
-                        <div class="mb-6 animate-slide-in rounded-2xl border border-green-200 bg-green-50 px-6 py-4 text-green-800 shadow-sm flex items-center gap-3">
+                        <div class="mb-6 animate-slide-in rounded-2xl border border-green-200 bg-green-50 px-6 py-4 text-green-700 shadow-sm flex items-center gap-3 transition-all duration-200">
                             <x-icon name="check-circle" class="w-6 h-6 flex-shrink-0" />
                             <span>{{ session('success') }}</span>
                         </div>
                     @endif
 
                     @if(session('error'))
-                        <div class="mb-6 animate-slide-in rounded-2xl border border-red-200 bg-red-50 px-6 py-4 text-red-800 shadow-sm flex items-center gap-3">
+                        <div class="mb-6 animate-slide-in rounded-2xl border border-red-200 bg-red-50 px-6 py-4 text-red-700 shadow-sm flex items-center gap-3 transition-all duration-200">
                             <x-icon name="exclamation-triangle" class="w-6 h-6 flex-shrink-0" />
                             <span>{{ session('error') }}</span>
                         </div>
                     @endif
 
                     @if($errors->any())
-                        <div class="mb-6 animate-slide-in rounded-2xl border border-red-200 bg-red-50 px-6 py-4 text-red-800 shadow-sm">
+                        <div class="mb-6 animate-slide-in rounded-2xl border border-red-200 bg-red-50 px-6 py-4 text-red-700 shadow-sm transition-all duration-200">
                             <div class="flex items-center gap-3 mb-3">
                                 <x-icon name="x-circle" class="w-6 h-6 flex-shrink-0" />
                                 <p class="font-semibold">Ada kesalahan:</p>

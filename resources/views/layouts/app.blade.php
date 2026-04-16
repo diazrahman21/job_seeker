@@ -10,34 +10,34 @@
 <body class="min-h-screen bg-gray-50 text-slate-900">
     <!-- Topbar Navigation -->
     <header class="sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm">
-        <div class="container-max px-4 py-4 flex items-center justify-between">
+        <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
             <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-600">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 text-2xl font-bold text-blue-600 no-underline hover:text-blue-700 transition-colors">
                 <x-icon name="briefcase" class="w-8 h-8" />
                 <span>JobBoard</span>
             </a>
 
             <!-- Navigation -->
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
                 @auth('job_seeker')
-                    <a href="{{ route('job-seeker.jobs') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Lowongan</a>
-                    <a href="{{ route('job-seeker.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Dashboard</a>
-                    <a href="{{ route('job-seeker.profile') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Profile</a>
+                    <a href="{{ route('job-seeker.jobs') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Lowongan</a>
+                    <a href="{{ route('job-seeker.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Dashboard</a>
+                    <a href="{{ route('job-seeker.profile') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Profile</a>
                 @endauth
                 @auth('recruiter')
-                    <a href="{{ route('recruiter.jobs.index') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Lowongan Saya</a>
-                    <a href="{{ route('recruiter.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Dashboard</a>
-                    <a href="{{ route('recruiter.profile.edit') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Profil</a>
+                    <a href="{{ route('recruiter.jobs.index') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Lowongan Saya</a>
+                    <a href="{{ route('recruiter.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Dashboard</a>
+                    <a href="{{ route('recruiter.profile.edit') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Profil</a>
                 @endauth
                 @auth('admin')
-                    <a href="{{ route('admin.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Admin</a>
+                    <a href="{{ route('admin.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors duration-200">Admin</a>
                 @endauth
             </nav>
 
             <!-- Auth Section -->
             <div class="flex items-center gap-4">
                 @if(auth('job_seeker')->check() || auth('recruiter')->check() || auth('admin')->check())
-                    <span class="text-sm text-slate-600">{{ auth()->user()->name ?? 'User' }}</span>
+                    <span class="text-sm text-slate-600 hidden md:inline">{{ auth()->user()->name ?? 'User' }}</span>
                     <form method="post" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <x-button variant="secondary" size="sm">
@@ -45,7 +45,7 @@
                         </x-button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-blue-600 font-medium no-underline">Login</a>
+                    <a href="{{ route('login') }}" class="text-blue-600 font-medium no-underline hover:text-blue-700 transition-colors">Login</a>
                 @endif
             </div>
         </div>

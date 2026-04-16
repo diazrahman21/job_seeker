@@ -92,12 +92,72 @@ a.no-underline {
     }
 }
 
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shimmer {
+    -100% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes bounce-subtle {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
 .animate-slide-in {
     animation: slideIn 0.3s ease-out;
 }
 
 .animate-fade-in {
     animation: fadeIn 0.3s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-shimmer {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #f9fafb 50%,
+        #f0f0f0 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+.animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+/* Modern SaaS Effects */
+.card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+}
+
+.btn-hover {
+    @apply transition-all duration-200 active:scale-95;
+}
+
+/* Smooth scrolling */
+.scroll-smooth {
+    scroll-behavior: smooth;
 }
 
 /* Responsive utilities */
@@ -111,4 +171,40 @@ a.no-underline {
     .hide-desktop {
         @apply hidden;
     }
+}
+
+/* Loading Skeleton */
+.skeleton {
+    @apply bg-gray-200 rounded-xl animate-pulse;
+}
+
+.skeleton-line {
+    @apply h-4 bg-gray-200 rounded-full animate-pulse mb-2;
+}
+
+.skeleton-card {
+    @apply bg-white rounded-2xl shadow-sm p-6 space-y-4;
+}
+
+.skeleton-card .skeleton-line:last-child {
+    @apply mb-0;
+}
+
+/* Text ellipsis */
+.line-clamp-1 {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

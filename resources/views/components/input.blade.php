@@ -2,10 +2,10 @@
 
 <div class="mb-4">
     @if($label)
-    <label for="{{ $name }}" class="block text-sm font-medium text-slate-900 mb-2">
+    <label for="{{ $name }}" class="block text-sm font-semibold text-slate-900 mb-2">
         {{ $label }}
         @if($required)
-        <span class="text-red-500">*</span>
+        <span class="text-red-600">*</span>
         @endif
     </label>
     @endif
@@ -15,7 +15,7 @@
         id="{{ $name }}"
         name="{{ $name }}"
         placeholder="{{ $placeholder }}"
-        class="block w-full px-4 py-2 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all {{ $error ? 'border-red-500' : '' }} {{ $class }}"
+        class="block w-full px-4 py-3 border border-gray-200 rounded-xl text-slate-900 placeholder-slate-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:shadow-sm {{ $error ? 'border-red-500 focus:ring-red-500' : '' }} {{ $class }}"
         {{ $attributes }}
         @required($required)
     >{{ old($name, $value) }}</textarea>
@@ -23,7 +23,7 @@
     <select
         id="{{ $name }}"
         name="{{ $name }}"
-        class="block w-full px-4 py-2 border border-gray-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all {{ $error ? 'border-red-500' : '' }} {{ $class }}"
+        class="block w-full px-4 py-3 border border-gray-200 rounded-xl text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:shadow-sm {{ $error ? 'border-red-500 focus:ring-red-500' : '' }} {{ $class }}"
         {{ $attributes }}
         @required($required)
     >
@@ -36,13 +36,13 @@
         name="{{ $name }}"
         placeholder="{{ $placeholder }}"
         value="{{ old($name, $value) }}"
-        class="block w-full px-4 py-2 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all {{ $error ? 'border-red-500' : '' }} {{ $class }}"
+        class="block w-full px-4 py-3 border border-gray-200 rounded-xl text-slate-900 placeholder-slate-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:shadow-sm {{ $error ? 'border-red-500 focus:ring-red-500' : '' }} {{ $class }}"
         {{ $attributes }}
         @required($required)
     />
     @endif
 
     @if($error)
-    <p class="mt-1 text-sm text-red-500">{{ $error }}</p>
+    <p class="mt-2 text-sm font-medium text-red-600">{{ $error }}</p>
     @endif
 </div>
