@@ -27,11 +27,11 @@
                         <x-icon name="chart-bar" class="w-5 h-5" />
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('recruiter.jobs') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.jobs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                    <a href="{{ route('recruiter.jobs.index') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.jobs*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                         <x-icon name="briefcase" class="w-5 h-5" />
                         <span>Lowongan Saya</span>
                     </a>
-                    <a href="{{ route('recruiter.profile') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.profile') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
+                    <a href="{{ route('recruiter.profile.edit') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 font-medium transition-all {{ request()->routeIs('recruiter.profile*') ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:bg-gray-100' }}">
                         <x-icon name="building-office-2" class="w-5 h-5" />
                         <span>Profil Perusahaan</span>
                     </a>

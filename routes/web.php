@@ -58,18 +58,24 @@ Route::middleware(['auth:job_seeker', 'verified'])->prefix('job-seeker')->name('
 
 Route::middleware('auth:recruiter')->prefix('recruiter')->name('recruiter.')->group(function () {
     Route::get('/dashboard', [RecruiterController::class, 'dashboard'])->name('dashboard');
-    Route::get('/profile', [RecruiterController::class, 'profile'])->name('profile');
-    Route::post('/profile', [RecruiterController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/profile/social', [RecruiterController::class, 'updateProfileSocial'])->name('profile.update-social');
-    Route::get('/jobs', [RecruiterController::class, 'jobs'])->name('jobs');
-    Route::get('/jobs/create', [RecruiterController::class, 'createJob'])->name('jobs.create');
-    Route::post('/jobs', [RecruiterController::class, 'storeJob'])->name('jobs.store');
-    Route::get('/jobs/{job}/edit', [RecruiterController::class, 'editJob'])->name('jobs.edit');
-    Route::put('/jobs/{job}', [RecruiterController::class, 'updateJob'])->name('jobs.update');
-    Route::delete('/jobs/{job}', [RecruiterController::class, 'destroyJob'])->name('jobs.delete');
-    Route::get('/jobs/{job}/applicants', [RecruiterController::class, 'applicants'])->name('jobs.applicants');
-    Route::put('/applications/{application}/status', [RecruiterController::class, 'updateApplicationStatus'])->name('applications.status');
-    Route::get('/applications/{application}/cv', [RecruiterController::class, 'downloadCv'])->name('applications.cv');
+    
+    // Jobs Resource Routes
+    Route::resource('jobs', \App\Http\Controllers\RecruiterJobController::class);
+    
+    // Applicants Routes
+    Route::prefix('applicants')->name('applicants.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\RecruiterApplicantController::class, 'index'])->name('index');
+        Route::get('/{applicant}', [\App\Http\Controllers\RecruiterApplicantController::class, 'show'])->name('show');
+        Route::patch('/{applicant}/status', [\App\Http\Controllers\RecruiterApplicantController::class, 'updateStatus'])->name('status');
+        Route::get('/{applicant}/cv', [\App\Http\Controllers\RecruiterApplicantController::class, 'downloadCv'])->name('cv');
+    });
+    
+    // Profile Routes
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/edit', [\App\Http\Controllers\RecruiterProfileController::class, 'edit'])->name('edit');
+        Route::put('/', [\App\Http\Controllers\RecruiterProfileController::class, 'update'])->name('update');
+        Route::delete('/', [\App\Http\Controllers\RecruiterProfileController::class, 'destroy'])->name('destroy');
+    });
 });
 
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {

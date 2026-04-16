@@ -15,10 +15,57 @@ class RecruiterController extends Controller
     {
         $company = auth('recruiter')->user();
 
+        // Get total jobs
+        $totalJobs = $company->jobs()->count();
+
+        // Get active jobs
+        $activeJobs = $company->jobs()->where('status', 'approved')->where('deadline_at', '>=', now())->count();
+
+        // Get total applicants
+        $totalApplicants = Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))->count();
+
+        // Get today's applicants
+        $todayApplicants = Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))
+            ->whereDate('created_at', today())
+            ->count();
+
+        // Get recent jobs with application count
+        $recentJobs = $company->jobs()
+            ->withCount('applications')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Get applicants by status
+        $applicantsByStatus = [
+            'applied' => Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))
+                ->where('status', 'applied')
+                ->count(),
+            'review' => Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))
+                ->where('status', 'review')
+                ->count(),
+            'interview' => Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))
+                ->where('status', 'interview')
+                ->count(),
+            'hired' => Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))
+                ->where('status', 'hired')
+                ->count(),
+            'rejected' => Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))
+                ->where('status', 'rejected')
+                ->count(),
+        ];
+
+        // Get pending jobs
+        $pendingJobs = $company->jobs()->where('status', 'pending')->get();
+
         return view('recruiter.dashboard', [
-            'totalPostings' => $company->jobs()->count(),
-            'totalApplicants' => Application::whereHas('job', fn ($q) => $q->where('company_id', $company->id))->count(),
-            'activeJobs' => $company->jobs()->where('status', 'approved')->where('deadline_at', '>=', now())->count(),
+            'totalJobs' => $totalJobs,
+            'activeJobs' => $activeJobs,
+            'totalApplicants' => $totalApplicants,
+            'todayApplicants' => $todayApplicants,
+            'recentJobs' => $recentJobs,
+            'applicantsByStatus' => $applicantsByStatus,
+            'pendingJobs' => $pendingJobs,
         ]);
     }
 
@@ -98,7 +145,7 @@ class RecruiterController extends Controller
 
         Job::create($validated);
 
-        return redirect()->route('recruiter.jobs')->with('success', 'Lowongan dibuat dan menunggu approval admin.');
+        return redirect()->route('recruiter.jobs.index')->with('success', 'Lowongan dibuat dan menunggu approval admin.');
     }
 
     public function editJob(Job $job)
@@ -114,7 +161,7 @@ class RecruiterController extends Controller
         $validated['status'] = 'pending';
         $job->update($validated);
 
-        return redirect()->route('recruiter.jobs')->with('success', 'Lowongan diperbarui.');
+        return redirect()->route('recruiter.jobs.index')->with('success', 'Lowongan diperbarui.');
     }
 
     public function destroyJob(Job $job)

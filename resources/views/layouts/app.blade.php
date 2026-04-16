@@ -25,9 +25,9 @@
                     <a href="{{ route('job-seeker.profile') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Profile</a>
                 @endauth
                 @auth('recruiter')
-                    <a href="{{ route('recruiter.jobs') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Lowongan Saya</a>
+                    <a href="{{ route('recruiter.jobs.index') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Lowongan Saya</a>
                     <a href="{{ route('recruiter.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Dashboard</a>
-                    <a href="{{ route('recruiter.profile') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Profil</a>
+                    <a href="{{ route('recruiter.profile.edit') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Profil</a>
                 @endauth
                 @auth('admin')
                     <a href="{{ route('admin.dashboard') }}" class="text-slate-600 hover:text-blue-600 no-underline transition-colors">Admin</a>
