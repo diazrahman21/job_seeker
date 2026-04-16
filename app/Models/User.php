@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -60,6 +61,11 @@ class User extends Authenticatable implements HasMedia
     public function experiences(): HasMany
     {
         return $this->hasMany(Experience::class);
+    }
+
+    public function jobSeeker(): HasOne
+    {
+        return $this->hasOne(JobSeeker::class);
     }
 
     public function educations(): HasMany

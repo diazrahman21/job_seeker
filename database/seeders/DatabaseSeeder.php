@@ -41,8 +41,30 @@ class DatabaseSeeder extends Seeder
         ]);
 
         foreach ($seekers as $user) {
-            Experience::factory()->count(2)->create(['user_id' => $user->id]);
-            Education::factory()->count(1)->create(['user_id' => $user->id]);
+            $jobSeeker = $user->jobSeeker()->firstOrCreate();
+
+            $jobSeeker->profile()->updateOrCreate([], [
+                'title' => $user->title,
+                'location' => $user->location,
+                'bio' => $user->bio,
+                'profile_photo_path' => $user->profile_photo_path,
+            ]);
+
+            foreach (($user->skills ?? []) as $skillName) {
+                $jobSeeker->skills()->firstOrCreate([
+                    'name' => $skillName,
+                ]);
+            }
+
+            Experience::factory()->count(2)->create([
+                'user_id' => $user->id,
+                'job_seeker_id' => $jobSeeker->id,
+            ]);
+
+            Education::factory()->count(1)->create([
+                'user_id' => $user->id,
+                'job_seeker_id' => $jobSeeker->id,
+            ]);
 
             $appliedJobs = $jobs->random(random_int(2, 4));
             foreach ($appliedJobs as $job) {
@@ -52,5 +74,16 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        User::query()->each(function (User $user): void {
+            $jobSeeker = $user->jobSeeker()->firstOrCreate();
+
+            $jobSeeker->profile()->firstOrCreate([], [
+                'title' => $user->title,
+                'location' => $user->location,
+                'bio' => $user->bio,
+                'profile_photo_path' => $user->profile_photo_path,
+            ]);
+        });
     }
 }

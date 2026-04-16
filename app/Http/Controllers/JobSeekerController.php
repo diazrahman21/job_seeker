@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Cv;
 use App\Models\Education;
 use App\Models\Experience;
 use App\Models\Job;
@@ -29,10 +30,15 @@ class JobSeekerController extends Controller
 
     public function profile(Request $request)
     {
+        $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
+        $profile = $jobSeeker->profile()->firstOrCreate();
+
         return view('job-seeker.profile', [
             'user' => $request->user(),
-            'experiences' => $request->user()->experiences()->latest()->get(),
-            'educations' => $request->user()->educations()->latest()->get(),
+            'profile' => $profile,
+            'skills' => $jobSeeker->skills()->orderBy('name')->pluck('name')->all(),
+            'experiences' => $jobSeeker->experiences()->latest()->get(),
+            'educations' => $jobSeeker->educations()->latest()->get(),
             'cvs' => $request->user()->getMedia('cvs'),
         ]);
     }
@@ -48,15 +54,37 @@ class JobSeekerController extends Controller
             'photo' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $validated['skills'] = !empty($validated['skills'])
-            ? array_map('trim', explode(',', $validated['skills']))
+        $skills = !empty($validated['skills'])
+            ? array_values(array_filter(array_map('trim', explode(',', $validated['skills']))))
             : [];
+
+        $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
+        $profile = $jobSeeker->profile()->firstOrCreate();
 
         if ($request->hasFile('photo')) {
             $validated['profile_photo_path'] = $request->file('photo')->store('profile-photos', 'public');
         }
 
-        $request->user()->update($validated);
+        $request->user()->update([
+            'name' => $validated['name'],
+            'title' => $validated['title'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'bio' => $validated['bio'] ?? null,
+            'skills' => $skills,
+            'profile_photo_path' => $validated['profile_photo_path'] ?? $request->user()->profile_photo_path,
+        ]);
+
+        $profile->update([
+            'title' => $validated['title'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'bio' => $validated['bio'] ?? null,
+            'profile_photo_path' => $validated['profile_photo_path'] ?? $profile->profile_photo_path,
+        ]);
+
+        $jobSeeker->skills()->delete();
+        foreach ($skills as $skillName) {
+            $jobSeeker->skills()->create(['name' => $skillName]);
+        }
 
         return back()->with('success', 'Profil berhasil diperbarui.');
     }
@@ -71,7 +99,11 @@ class JobSeekerController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $request->user()->experiences()->create($validated);
+        $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
+
+        $jobSeeker->experiences()->create($validated + [
+            'user_id' => $request->user()->id,
+        ]);
 
         return back()->with('success', 'Pengalaman kerja ditambahkan.');
     }
@@ -87,7 +119,11 @@ class JobSeekerController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $request->user()->educations()->create($validated);
+        $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
+
+        $jobSeeker->educations()->create($validated + [
+            'user_id' => $request->user()->id,
+        ]);
 
         return back()->with('success', 'Riwayat pendidikan ditambahkan.');
     }
@@ -98,7 +134,18 @@ class JobSeekerController extends Controller
             'cv_file' => ['required', 'mimes:pdf', 'max:5120'],
         ]);
 
-        $request->user()->addMediaFromRequest('cv_file')->toMediaCollection('cvs');
+        $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
+        $media = $request->user()->addMediaFromRequest('cv_file')->toMediaCollection('cvs');
+
+        Cv::updateOrCreate(
+            [
+                'job_seeker_id' => $jobSeeker->id,
+                'media_id' => $media->id,
+            ],
+            [
+                'file_name' => $media->file_name,
+            ]
+        );
 
         return back()->with('success', 'CV berhasil diunggah.');
     }
@@ -107,6 +154,12 @@ class JobSeekerController extends Controller
     {
         $media = $request->user()->getMedia('cvs')->firstWhere('id', $mediaId);
         abort_unless($media, 404);
+
+        $jobSeekerId = optional($request->user()->jobSeeker)->id;
+        if ($jobSeekerId) {
+            Cv::where('job_seeker_id', $jobSeekerId)->where('media_id', $media->id)->delete();
+        }
+
         $media->delete();
 
         return back()->with('success', 'CV dihapus.');
@@ -143,6 +196,17 @@ class JobSeekerController extends Controller
 
         if ($request->hasFile('cv_file')) {
             $cv = $request->user()->addMediaFromRequest('cv_file')->toMediaCollection('cvs');
+
+            $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
+            Cv::updateOrCreate(
+                [
+                    'job_seeker_id' => $jobSeeker->id,
+                    'media_id' => $cv->id,
+                ],
+                [
+                    'file_name' => $cv->file_name,
+                ]
+            );
         } else {
             $cv = $request->user()->getMedia('cvs')->firstWhere('id', (int) ($validated['cv_media_id'] ?? 0));
 

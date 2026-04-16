@@ -12,6 +12,7 @@ class Experience extends Model
 
     protected $fillable = [
         'user_id',
+        'job_seeker_id',
         'company_name',
         'job_title',
         'start_date',
@@ -30,5 +31,10 @@ class Experience extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function jobSeeker(): BelongsTo
+    {
+        return $this->belongsTo(JobSeeker::class);
     }
 }

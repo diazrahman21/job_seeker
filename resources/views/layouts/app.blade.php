@@ -15,6 +15,7 @@
                 @auth('job_seeker')
                     <a href="{{ route('job-seeker.jobs') }}" class="rounded px-3 py-2 hover:bg-slate-100">Lowongan</a>
                     <a href="{{ route('job-seeker.dashboard') }}" class="rounded px-3 py-2 hover:bg-slate-100">Dashboard</a>
+                    <a href="{{ route('job-seeker.profile') }}" class="rounded px-3 py-2 hover:bg-slate-100">Profile</a>
                 @endauth
                 @auth('recruiter')
                     <a href="{{ route('recruiter.jobs') }}" class="rounded px-3 py-2 hover:bg-slate-100">Lowongan Saya</a>
