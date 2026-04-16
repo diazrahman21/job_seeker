@@ -73,9 +73,37 @@ Route::middleware('auth:recruiter')->prefix('recruiter')->name('recruiter.')->gr
 });
 
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Companies
     Route::get('/companies', [AdminController::class, 'companies'])->name('companies');
+    Route::get('/companies/{company}', [AdminController::class, 'showCompany'])->name('companies.show');
     Route::put('/companies/{company}/status', [AdminController::class, 'updateCompanyStatus'])->name('companies.status');
+
+    // Jobs
     Route::get('/jobs', [AdminController::class, 'jobs'])->name('jobs');
+    Route::get('/jobs/{job}', [AdminController::class, 'showJob'])->name('jobs.show');
     Route::put('/jobs/{job}/status', [AdminController::class, 'updateJobStatus'])->name('jobs.status');
+    Route::put('/jobs/{job}/featured', [AdminController::class, 'toggleFeatured'])->name('jobs.featured');
+    Route::delete('/jobs/{job}', [AdminController::class, 'deleteJob'])->name('jobs.delete');
+    Route::post('/jobs/{job}/restore', [AdminController::class, 'restoreJob'])->name('jobs.restore');
+
+    // Users
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
+    Route::put('/users/{user}/status', [AdminController::class, 'updateUserStatus'])->name('users.status');
+    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::post('/users/{user}/restore', [AdminController::class, 'restoreUser'])->name('users.restore');
+
+    // Applications
+    Route::get('/applications', [AdminController::class, 'applications'])->name('applications');
+    Route::get('/applications/{application}/cv', [AdminController::class, 'downloadApplicationCv'])->name('applications.cv');
+
+    // Reports
+    Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+    Route::get('/reports/export-csv', [AdminController::class, 'exportReportsCsv'])->name('reports.export');
+
+    // Activity Logs
+    Route::get('/logs', [AdminController::class, 'logs'])->name('logs');
 });

@@ -32,6 +32,7 @@ class User extends Authenticatable implements HasMedia
         'skills',
         'location',
         'profile_photo_path',
+        'status',
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -43,5 +44,13 @@ class Company extends Authenticatable
     public function jobs(): HasMany
     {
         return $this->hasMany(Job::class);
+    }
+
+    public function scopeStatus(Builder $query, ?string $status): Builder
+    {
+        if (!$status) {
+            return $query;
+        }
+        return $query->where('status', $status);
     }
 }

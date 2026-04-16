@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'job_listings';
 
@@ -27,6 +28,7 @@ class Job extends Model
         'salary_max',
         'deadline_at',
         'status',
+        'is_featured',
     ];
 
     protected function casts(): array
@@ -35,6 +37,8 @@ class Job extends Model
             'deadline_at' => 'datetime',
             'salary_min' => 'decimal:2',
             'salary_max' => 'decimal:2',
+            'is_featured' => 'boolean',
+            'deleted_at' => 'datetime',
         ];
     }
 
