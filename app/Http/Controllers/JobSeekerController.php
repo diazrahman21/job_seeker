@@ -7,6 +7,7 @@ use App\Models\Cv;
 use App\Models\Education;
 use App\Models\Experience;
 use App\Models\Job;
+use App\Models\SkillOption;
 use Illuminate\Http\Request;
 
 class JobSeekerController extends Controller
@@ -36,7 +37,8 @@ class JobSeekerController extends Controller
         return view('job-seeker.profile', [
             'user' => $request->user(),
             'profile' => $profile,
-            'skills' => $jobSeeker->skills()->orderBy('name')->pluck('name')->all(),
+            'selectedSkillIds' => $jobSeeker->skills()->whereNotNull('skill_option_id')->pluck('skill_option_id')->all(),
+            'skillOptions' => SkillOption::query()->orderBy('name')->get(['id', 'name']),
             'experiences' => $jobSeeker->experiences()->latest()->get(),
             'educations' => $jobSeeker->educations()->latest()->get(),
             'cvs' => $request->user()->getMedia('cvs'),
@@ -47,16 +49,19 @@ class JobSeekerController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:255'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'bio' => ['nullable', 'string'],
-            'skills' => ['nullable', 'string'],
+            'title' => ['required', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255'],
+            'bio' => ['required', 'string', 'min:10'],
+            'skills' => ['required', 'array', 'min:1', 'max:5'],
+            'skills.*' => ['integer', 'distinct', 'exists:skill_options,id'],
             'photo' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $skills = !empty($validated['skills'])
-            ? array_values(array_filter(array_map('trim', explode(',', $validated['skills']))))
-            : [];
+        $skillIds = $validated['skills'] ?? [];
+        $selectedOptions = SkillOption::query()
+            ->whereIn('id', $skillIds)
+            ->get(['id', 'name']);
+        $skills = $selectedOptions->pluck('name')->all();
 
         $jobSeeker = $request->user()->jobSeeker()->firstOrCreate();
         $profile = $jobSeeker->profile()->firstOrCreate();
@@ -82,8 +87,11 @@ class JobSeekerController extends Controller
         ]);
 
         $jobSeeker->skills()->delete();
-        foreach ($skills as $skillName) {
-            $jobSeeker->skills()->create(['name' => $skillName]);
+        foreach ($selectedOptions as $option) {
+            $jobSeeker->skills()->create([
+                'skill_option_id' => $option->id,
+                'name' => $option->name,
+            ]);
         }
 
         return back()->with('success', 'Profil berhasil diperbarui.');

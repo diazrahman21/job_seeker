@@ -12,11 +12,17 @@ class Skill extends Model
 
     protected $fillable = [
         'job_seeker_id',
+        'skill_option_id',
         'name',
     ];
 
     public function jobSeeker(): BelongsTo
     {
         return $this->belongsTo(JobSeeker::class);
+    }
+
+    public function skillOption(): BelongsTo
+    {
+        return $this->belongsTo(SkillOption::class);
     }
 }
