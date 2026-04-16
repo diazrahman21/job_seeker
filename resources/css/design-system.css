@@ -1,0 +1,114 @@
+/**
+ * Global Design System Configuration
+ * ===================================
+ * 
+ * Color Palette:
+ * - Primary: blue-600 (#2563eb)
+ * - Secondary: slate-900 (#0f172a)
+ * - Background: gray-50 (#f9fafb)
+ * 
+ * Spacing: 4px, 8px, 12px, 16px, 20px, 24px (Tailwind default)
+ * Border Radius:
+ *   - Cards: rounded-2xl (1rem)
+ *   - Buttons: rounded-xl (0.75rem)
+ * 
+ * Shadows:
+ *   - Default: shadow-sm
+ *   - Hover: shadow-md
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --color-primary: #2563eb;
+    --color-secondary: #0f172a;
+    --color-success: #16a34a;
+    --color-warning: #ca8a04;
+    --color-danger: #dc2626;
+    --color-info: #0ea5e9;
+    --color-bg: #f9fafb;
+    --color-text: #1e293b;
+    --color-border: #e2e8f0;
+}
+
+html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply bg-gray-50 text-slate-900;
+}
+
+/* Global transition */
+* {
+    @apply transition-colors duration-200;
+}
+
+/* Link styling */
+a {
+    @apply text-blue-600 hover:text-blue-700 underline;
+}
+
+a.no-underline {
+    @apply no-underline hover:no-underline;
+}
+
+/* Utility: Container */
+.container-max {
+    @apply max-w-7xl mx-auto;
+}
+
+/* Status colors */
+.status-applied { @apply bg-blue-100 text-blue-800; }
+.status-review { @apply bg-yellow-100 text-yellow-800; }
+.status-interview { @apply bg-purple-100 text-purple-800; }
+.status-rejected { @apply bg-red-100 text-red-800; }
+.status-hired { @apply bg-green-100 text-green-800; }
+.status-approved { @apply bg-green-100 text-green-800; }
+.status-pending { @apply bg-yellow-100 text-yellow-800; }
+.status-suspended { @apply bg-red-100 text-red-800; }
+.status-active { @apply bg-green-100 text-green-800; }
+.status-inactive { @apply bg-gray-100 text-gray-800; }
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .hide-mobile {
+        @apply hidden;
+    }
+}
+
+@media (min-width: 769px) {
+    .hide-desktop {
+        @apply hidden;
+    }
+}
