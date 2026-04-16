@@ -25,11 +25,11 @@
                 />
                 
                 <x-input 
-                    name="job_type" 
+                    name="employment_type" 
                     label="Tipe Pekerjaan"
                     type="select"
-                    :value="old('job_type')"
-                    :error="$errors->first('job_type')"
+                    :value="old('employment_type')"
+                    :error="$errors->first('employment_type')"
                     required
                 >
                     <option value="">-- Pilih Tipe --</option>

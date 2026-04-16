@@ -50,7 +50,7 @@ class RecruiterJobController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'job_type' => ['required', 'in:Full-time,Part-time,Contract,Freelance'],
+            'employment_type' => ['required', 'in:Full-time,Part-time,Contract,Freelance'],
             'location' => ['required', 'string', 'max:255'],
             'salary_min' => ['nullable', 'integer', 'min:0'],
             'salary_max' => ['nullable', 'integer', 'min:0'],
@@ -65,6 +65,18 @@ class RecruiterJobController extends Controller
         Job::create($validated);
 
         return redirect()->route('recruiter.jobs.index')->with('success', 'Lowongan berhasil dibuat dan menunggu persetujuan admin.');
+    }
+
+    /**
+     * Display a job detail
+     */
+    public function show(Job $job)
+    {
+        $this->authorize('view', $job);
+        
+        $job->load('applications.user');
+        
+        return view('recruiter.jobs.show', compact('job'));
     }
 
     /**
@@ -85,7 +97,7 @@ class RecruiterJobController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'job_type' => ['required', 'in:Full-time,Part-time,Contract,Freelance'],
+            'employment_type' => ['required', 'in:Full-time,Part-time,Contract,Freelance'],
             'location' => ['required', 'string', 'max:255'],
             'salary_min' => ['nullable', 'integer', 'min:0'],
             'salary_max' => ['nullable', 'integer', 'min:0'],
