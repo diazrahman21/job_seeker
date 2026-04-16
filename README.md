@@ -80,8 +80,14 @@ npm run dev
 ```
 
 ## Dummy Account
-- Admin: admin@jobboard.test / password123
-- Company & Job Seeker: dibuat dari seeder (password default: password123)
+- Admin
+email : admin@jobboard.test
+pass : password123
+- Reqruiter
+email : demo@exampletech.id
+pass : demo123
+- Job Seeker
+buat sendiri
 
 ## Catatan
 - Seeder membuat: 10 perusahaan, 30 lowongan, 20 pelamar dummy.
