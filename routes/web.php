@@ -29,6 +29,9 @@ Route::middleware('guest:admin')->group(function () {
 
 Route::post('/logout', [PortalAuthController::class, 'logout'])->name('logout');
 
+// Public routes
+Route::get('/companies/{company}', [JobSeekerController::class, 'viewCompanyProfile'])->name('companies.profile');
+
 Route::middleware('auth:job_seeker')->prefix('job-seeker')->name('job-seeker.')->group(function () {
     Route::get('/dashboard', [JobSeekerController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [JobSeekerController::class, 'profile'])->name('profile');
@@ -46,6 +49,9 @@ Route::middleware('auth:job_seeker')->prefix('job-seeker')->name('job-seeker.')-
 
 Route::middleware('auth:recruiter')->prefix('recruiter')->name('recruiter.')->group(function () {
     Route::get('/dashboard', [RecruiterController::class, 'dashboard'])->name('dashboard');
+    Route::get('/profile', [RecruiterController::class, 'profile'])->name('profile');
+    Route::post('/profile', [RecruiterController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/social', [RecruiterController::class, 'updateProfileSocial'])->name('profile.update-social');
     Route::get('/jobs', [RecruiterController::class, 'jobs'])->name('jobs');
     Route::get('/jobs/create', [RecruiterController::class, 'createJob'])->name('jobs.create');
     Route::post('/jobs', [RecruiterController::class, 'storeJob'])->name('jobs.store');

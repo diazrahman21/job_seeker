@@ -35,14 +35,34 @@ class CompanyFactory extends Factory
             'Palembang',
         ];
 
+        $industries = [
+            'Teknologi Informasi',
+            'Fintech',
+            'E-Commerce',
+            'SaaS',
+            'Media Digital',
+            'Game Development',
+            'IoT',
+            'Cloud Services',
+            'Konsultasi IT',
+            'Cybersecurity',
+        ];
+
+        $companySizes = ['1-50', '51-200', '201-500', '501-1000', '1000+'];
+
         $name = fake()->randomElement($companyNames);
+        $slug = Str::slug($name);
 
         return [
             'name' => $name,
-            'email' => fake()->unique()->userName() . '@perusahaan.id',
-            'description' => 'Perusahaan ini bergerak di bidang teknologi digital dan berfokus pada pengembangan produk yang membantu bisnis di Indonesia tumbuh lebih cepat.',
-            'website' => 'https://www.' . Str::slug($name) . '.co.id',
+            'email' => fake()->unique()->userName() . '@' . $slug . '.id',
+            'description' => 'Perusahaan kami bergerak di bidang teknologi digital dan berfokus pada pengembangan produk inovatif yang membantu bisnis di Indonesia tumbuh lebih cepat. Kami berkomitmen untuk memberikan solusi terbaik dengan tim profesional dan berpengalaman.',
+            'website' => 'https://www.' . $slug . '.id',
             'location' => fake()->randomElement($cities),
+            'industry' => fake()->randomElement($industries),
+            'company_size' => fake()->randomElement($companySizes),
+            'founded_year' => fake()->year() >= 2010 ? fake()->year() : fake()->numberBetween(2010, 2020),
+            'phone' => '+62' . fake()->numberBetween(8, 9) . fake()->numberBetween(100000000, 999999999),
             'status' => 'pending',
         ];
     }

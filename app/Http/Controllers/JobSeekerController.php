@@ -255,4 +255,12 @@ class JobSeekerController extends Controller
             'jobs' => $request->user()->bookmarks()->with('company')->latest('job_listings.id')->cursorPaginate(10),
         ]);
     }
+
+    public function viewCompanyProfile(Request $request, \App\Models\Company $company)
+    {
+        return view('job-seeker.company-profile', [
+            'company' => $company,
+            'jobs' => $company->jobs()->where('status', 'approved')->orderBy('deadline_at', 'desc')->get(),
+        ]);
+    }
 }

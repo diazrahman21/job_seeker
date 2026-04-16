@@ -22,6 +22,62 @@ class RecruiterController extends Controller
         ]);
     }
 
+    public function profile(Request $request)
+    {
+        $company = auth('recruiter')->user();
+
+        return view('recruiter.profile', [
+            'company' => $company,
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255'],
+            'industry' => ['required', 'string', 'max:255'],
+            'company_size' => ['required', 'in:1-50,51-200,201-500,501-1000,1000+'],
+            'founded_year' => ['required', 'integer', 'min:1900', 'max:' . date('Y')],
+            'description' => ['required', 'string', 'min:20'],
+            'website' => ['nullable', 'url'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'logo' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $company = auth('recruiter')->user();
+
+        if ($request->hasFile('logo')) {
+            $validated['logo_path'] = $request->file('logo')->store('logos', 'public');
+        }
+
+        $company->update($validated);
+
+        return back()->with('success', 'Profil perusahaan berhasil diperbarui.');
+    }
+
+    public function updateProfileSocial(Request $request)
+    {
+        $validated = $request->validate([
+            'linkedin' => ['nullable', 'url'],
+            'twitter' => ['nullable', 'url'],
+            'instagram' => ['nullable', 'url'],
+        ]);
+
+        $company = auth('recruiter')->user();
+        $socialMedia = [
+            'linkedin' => $validated['linkedin'] ?? null,
+            'twitter' => $validated['twitter'] ?? null,
+            'instagram' => $validated['instagram'] ?? null,
+        ];
+
+        $company->update([
+            'social_media' => json_encode($socialMedia),
+        ]);
+
+        return back()->with('success', 'Media sosial berhasil diperbarui.');
+    }
+
     public function jobs(Request $request)
     {
         return view('recruiter.jobs-index', [

@@ -20,6 +20,7 @@
                 @auth('recruiter')
                     <a href="{{ route('recruiter.jobs') }}" class="rounded px-3 py-2 hover:bg-slate-100">Lowongan Saya</a>
                     <a href="{{ route('recruiter.dashboard') }}" class="rounded px-3 py-2 hover:bg-slate-100">Dashboard</a>
+                    <a href="{{ route('recruiter.profile') }}" class="rounded px-3 py-2 hover:bg-slate-100">Profil Perusahaan</a>
                 @endauth
                 @auth('admin')
                     <a href="{{ route('admin.dashboard') }}" class="rounded px-3 py-2 hover:bg-slate-100">Admin</a>
