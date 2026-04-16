@@ -15,15 +15,23 @@
             <p class="text-sm">Kategori: {{ $job->category }}</p>
             <p class="text-sm">Gaji: {{ $job->salary_min }} - {{ $job->salary_max }}</p>
             @if(!$hasApplied)
-            <form method="post" action="{{ route('job-seeker.jobs.apply', $job) }}" class="mt-4 space-y-2">
+            <form method="post" action="{{ route('job-seeker.jobs.apply', $job) }}" enctype="multipart/form-data" class="mt-4 space-y-2">
                 @csrf
                 <textarea name="cover_letter" placeholder="Cover letter" class="w-full rounded-lg border-slate-300"></textarea>
-                <select name="cv_media_id" class="w-full rounded-lg border-slate-300" required>
-                    <option value="">Pilih CV</option>
+                <input type="file" name="cv_file" accept="application/pdf" class="w-full rounded-lg border-slate-300">
+                <p class="text-xs text-slate-500">Upload CV PDF langsung di sini, atau pilih CV yang sudah pernah diunggah.</p>
+                <select name="cv_media_id" class="w-full rounded-lg border-slate-300">
+                    <option value="">Pilih CV yang sudah ada (opsional)</option>
                     @foreach($cvs as $cv)
                         <option value="{{ $cv->id }}">{{ $cv->name }}</option>
                     @endforeach
                 </select>
+                @error('cv_file')
+                    <p class="text-sm text-rose-600">{{ $message }}</p>
+                @enderror
+                @error('cv_media_id')
+                    <p class="text-sm text-rose-600">{{ $message }}</p>
+                @enderror
                 <button class="w-full rounded-lg bg-slate-900 py-2 text-white">Lamar Sekarang</button>
             </form>
             @endif

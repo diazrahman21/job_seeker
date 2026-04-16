@@ -137,11 +137,21 @@ class JobSeekerController extends Controller
 
         $validated = $request->validate([
             'cover_letter' => ['nullable', 'string'],
-            'cv_media_id' => ['required', 'integer'],
+            'cv_media_id' => ['nullable', 'integer', 'required_without:cv_file'],
+            'cv_file' => ['nullable', 'file', 'mimes:pdf', 'max:5120', 'required_without:cv_media_id'],
         ]);
 
-        $cv = $request->user()->getMedia('cvs')->firstWhere('id', (int) $validated['cv_media_id']);
-        abort_unless($cv, 422);
+        if ($request->hasFile('cv_file')) {
+            $cv = $request->user()->addMediaFromRequest('cv_file')->toMediaCollection('cvs');
+        } else {
+            $cv = $request->user()->getMedia('cvs')->firstWhere('id', (int) ($validated['cv_media_id'] ?? 0));
+
+            if (! $cv) {
+                return back()->withErrors([
+                    'cv_media_id' => 'Silakan pilih CV yang valid atau upload CV PDF baru.',
+                ])->withInput();
+            }
+        }
 
         Application::create([
             'job_id' => $job->id,
